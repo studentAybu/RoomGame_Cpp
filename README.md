@@ -7,8 +7,8 @@ This is a basic object-oriented C++ project simulating a simple room-based adven
 Open a terminal and navigate to your project folder:
 
 ```bash
-g++ -std=c++11 -o rpg_game main.cpp Character.cpp Warrior.cpp Wizard.cpp Rogue.cpp Inventory.cpp Item.cpp Potion.cpp Sword.cpp
-./rpg_game  
+g++ -std=c++11 -o game main.cpp Character.cpp Warrior.cpp Wizard.cpp Rogue.cpp Inventory.cpp Item.cpp Potion.cpp Sword.cpp
+./game  
 
 
 
