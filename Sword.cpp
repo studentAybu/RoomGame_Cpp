@@ -6,7 +6,7 @@ Sword::Sword(const std::string& name, const std::string& description, int damage
     : Item(name, description), damage(damage) {}
 
 void Sword::use(Character& target) {
-    // Sword doğrudan kullanılabilir değil, ama override ettik.
+   
     std::cout << "Sword can't be used like a potion!" << std::endl;
 }
 

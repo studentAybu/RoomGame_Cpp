@@ -1,35 +1,74 @@
 #include <iostream>
+#include <memory>
 #include "Warrior.h"
-#include "Inventory.h"
+#include "Wizard.h"
+#include "Rogue.h"
+#include "Potion.h"
 #include "Sword.h"
 
+void printCharacterStats(Character& c) {
+    std::cout << "Name: " << c.getName() << "\n";
+    std::cout << "Health: " << c.getHealth() << "\n";
+    std::cout << "Sword: " << c.getSword()->getDescription() << "\n";
+    std::cout << "----------------------\n";
+}
+
 int main() {
-    std::cout << "--- Character Test ---" << std::endl;
-    Warrior w("Thorin", 100, 20);
-    w.attack();
+    Warrior warrior("Aragorn", 120, 25);
+    Wizard wizard("Gandalf", 100, 50);
+    Rogue rogue("Legolas", 90, 30);
 
-    std::cout << "\n--- Inventory Test ---" << std::endl;
-    Inventory inv;
+    std::cout << "=== Character Info ===\n";
+    printCharacterStats(warrior);
+    printCharacterStats(wizard);
+    printCharacterStats(rogue);
 
-    Item* sword1 = new Sword("Steel Sword", "A sharp steel sword.", 15);
-    Item* sword2 = new Sword("Iron Sword", "A regular iron sword.", 10);
+    warrior.modifyHealth(-20);
+    wizard.setHealth(80);
+    rogue.modifyHealth(15);
 
-    inv.addItem(sword1);
-    inv.addItem(sword2);
+    std::cout << "\n=== After Health Modifications ===\n";
+    printCharacterStats(warrior);
+    printCharacterStats(wizard);
+    printCharacterStats(rogue);
 
-    Item* found = inv.getItem("Steel Sword");
-    if (found) {
-        std::cout << "Found item: " << found->getName() << " - " << found->getDescription() << std::endl;
-    } else {
-        std::cout << "Item not found." << std::endl;
+    std::cout << "\n=== Using Potions ===\n";
+
+    auto potion1 = std::make_unique<Potion>("Healing Potion", "Restores 30 health", 30);
+    auto potion2 = std::make_unique<Potion>("Mana Potion", "Restores magic", 25);
+
+    warrior.getInventory()->addItem(std::move(potion1));
+    if (warrior.getInventory()->useItemOn("Healing Potion", warrior)) {
+        std::cout << warrior.getName() << " used a Healing Potion!\n";
     }
 
-    std::cout << "\n--- Item Removal Test ---" << std::endl;
-    bool removed = inv.removeItem("Steel Sword");
-    std::cout << "Was Steel Sword removed? " << (removed ? "Yes" : "No") << std::endl;
+    wizard.getInventory()->addItem(std::move(potion2));
+    wizard.getInventory()->useItemOn("Mana Potion", wizard);
 
-    found = inv.getItem("Steel Sword");
-    std::cout << "Searching for removed item again: " << (found ? "Found" : "Not found") << std::endl;
+    printCharacterStats(warrior);
+    printCharacterStats(wizard);
+
+    std::cout << "\n=== Attacks ===\n";
+    warrior.attack();
+    wizard.attack();
+    rogue.attack();
+
+    std::cout << "\n=== Inventory Capacity Test ===\n";
+    for (int i = 0; i < 11; ++i) {
+        auto tempPotion = std::make_unique<Potion>("Potion" + std::to_string(i), "Test Potion", 5);
+        bool added = rogue.getInventory()->addItem(std::move(tempPotion));
+        if (!added) {
+            std::cout << "Failed to add Potion" << i << " - Inventory full!\n";
+        }
+    }
+
+    std::cout << "\n=== Inventory Item Removal ===\n";
+    bool removed = rogue.getInventory()->removeItem("Potion3");
+    if (removed) {
+        std::cout << "Potion3 removed successfully from Rogue's inventory.\n";
+    } else {
+        std::cout << "Potion3 not found.\n";
+    }
 
     return 0;
 }

@@ -2,19 +2,21 @@
 #define INVENTORY_H
 
 #include "Item.h"
+#include <memory>
+#include <vector>
 
 class Inventory {
-private:
-    Item* items[10];
-    int itemCount;
-
 public:
     Inventory();
     ~Inventory();
-
-    bool addItem(Item* item);
+    
+    bool addItem(std::unique_ptr<Item> item);
     bool removeItem(const std::string& itemName);
     Item* getItem(const std::string& itemName);
+    bool useItemOn(const std::string& itemName, Character& target);
+
+private:
+    std::vector<std::unique_ptr<Item>> items;
 };
 
 #endif

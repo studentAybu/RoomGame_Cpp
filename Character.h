@@ -2,26 +2,28 @@
 #define CHARACTER_H
 
 #include <string>
-class Sword; // Forward declaration
+#include "Inventory.h"
+#include "Sword.h"
 
 class Character {
-private:
-    std::string name;
-    int health;
-
-protected:
-    Sword* sword; // Composition
-
 public:
     Character(const std::string& name, int health);
-    virtual ~Character();
+    virtual ~Character();  
 
-    virtual void attack() = 0; 
-
+    void modifyHealth(int amount);
     std::string getName() const;
     int getHealth() const;
-    void setHealth(int health);
-    void modifyHealth(int amount);
+    void setHealth(int h);
+    Inventory* getInventory(); 
+    Sword* getSword() const;
+
+    virtual void attack() = 0;
+
+protected:
+    std::string name;
+    int health;
+    Inventory inventory;
+    Sword* sword;  
 };
 
 #endif

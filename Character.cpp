@@ -1,16 +1,13 @@
-
 #include "Character.h"
 #include "Sword.h"
 
 Character::Character(const std::string& name, int health)
-    : name(name), health(health)
-{
-    // Composition: karakter yaratıldığında Sword da yaratılıyor
+    : name(name), health(health) {
     sword = new Sword("Basic Sword", "A simple sword.", 10);
 }
 
 Character::~Character() {
-    delete sword; // Composition olduğu için sorumluluk Character'da
+    delete sword; 
 }
 
 std::string Character::getName() const {
@@ -30,3 +27,10 @@ void Character::modifyHealth(int amount) {
     if (health < 0) health = 0;
 }
 
+Sword* Character::getSword() const {
+    return sword;
+}
+
+Inventory* Character::getInventory() {
+    return &inventory;
+}
